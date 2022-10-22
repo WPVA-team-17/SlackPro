@@ -1,3 +1,5 @@
+import { Chat } from 'frontEnd'
+
 const generateRandomString = (myLength: number) => {
   const chars =
     'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890'
@@ -29,4 +31,24 @@ const generateRandomMessages = (count: number) => {
   return messages
 }
 
-export { generateRandomString, generateRandomMessages }
+const generateChat = (id: number):Chat => {
+  return {
+    id,
+    name: generateRandomString(10),
+    avatar: generateRandomString(10),
+    lastMessage: generateRandomString(10),
+    lastMessageDate: generateRandomString(10),
+    unreadMessages: Math.round(Math.random() * 100),
+    participants: []
+  }
+}
+
+const generateChats = (count: number):Chat[] => {
+  const chats = []
+  for (let i = 0; i < count; i++) {
+    chats.push(generateChat(i))
+  }
+  return chats
+}
+
+export { generateRandomString, generateRandomMessages, generateChats }
