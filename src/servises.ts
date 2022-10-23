@@ -1,4 +1,4 @@
-import { Chat } from 'frontEnd'
+import { Chat, Message, User } from 'frontEnd'
 
 const generateRandomString = (myLength: number) => {
   const chars =
@@ -12,43 +12,91 @@ const generateRandomString = (myLength: number) => {
   return String(randomString)
 }
 
-const generateRandomMessage = (id: number) => {
+const generateRandomMessage = (id: string, senderId = 'none'):Message => {
   return {
     id,
+    senderId,
     text: generateRandomString(10),
-    date: new Date(),
-    isRead: Boolean(Math.round(Math.random())),
-    sent: Boolean(Math.round(Math.random())),
-    stamp: Math.random() * 100
+    date: String(Date.now()),
+    isRead: Boolean(Math.round(Math.random()))
   }
 }
 
-const generateRandomMessages = (count: number) => {
+const generateRandomMessages = (count: number):Message[] => {
   const messages = []
   for (let i = 0; i < count; i++) {
-    messages.push(generateRandomMessage(i))
+    messages.push(generateRandomMessage(String(i)))
   }
   return messages
 }
 
-const generateChat = (id: number):Chat => {
+const generateUser = (id: string):User => {
+  return {
+    id,
+    login: generateRandomString(10),
+    avatar: generateRandomString(10),
+    status: generateRandomString(10),
+    firstName: generateRandomString(10),
+    lastName: generateRandomString(10),
+    email: generateRandomString(10)
+  }
+}
+
+const generateUsers = (count: number):User[] => {
+  const users = []
+  for (let i = 0; i < count; i++) {
+    users.push(generateUser(String(i)))
+  }
+  return users
+}
+
+const generateChat = (id: string):Chat => {
   return {
     id,
     name: generateRandomString(10),
     avatar: generateRandomString(10),
-    lastMessage: generateRandomString(10),
-    lastMessageDate: generateRandomString(10),
-    unreadMessages: Math.round(Math.random() * 100),
-    participants: []
+    participants: generateUsers(2),
+    isPrivate: Boolean(Math.round(Math.random())),
+    messages: generateRandomMessages(10)
+  }
+}
+
+const messagesBetweenUsers = (user1: User, user2: User):Message[] => {
+  const messages = []
+  for (let i = 0; i < 10; i++) {
+    messages.push(generateRandomMessage(String(i), Math.round(Math.random()) ? user1.id : user2.id))
+  }
+  return messages
+}
+
+const generateChatBetweenUsers = (user1: User, user2: User):Chat => {
+  return {
+    id: generateRandomString(10),
+    name: generateRandomString(10),
+    avatar: generateRandomString(10),
+    participants: [user1, user2],
+    isPrivate: true,
+    messages: messagesBetweenUsers(user1, user2)
   }
 }
 
 const generateChats = (count: number):Chat[] => {
   const chats = []
   for (let i = 0; i < count; i++) {
-    chats.push(generateChat(i))
+    chats.push(generateChat(String(i)))
   }
   return chats
 }
 
-export { generateRandomString, generateRandomMessages, generateChats }
+const generateConversations = (count: number):Chat[] => {
+  const users = generateUsers(count)
+  const chats = []
+  for (let i = 0; i < count; i++) {
+    for (let j = i + 1; j < count; j++) {
+      chats.push(generateChatBetweenUsers(users[i], users[j]))
+    }
+  }
+  return chats
+}
+
+export { generateRandomString, generateRandomMessages, generateChats, generateConversations }
