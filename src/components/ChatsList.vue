@@ -47,12 +47,8 @@ export default defineComponent({
     }
   },
   methods: {
-    onClick () {
-      // await api call
-      chats.setCurrentChatIndex(0)
-    },
-    selectChat (data) {
-      chats.findChatIndexById(data)
+    selectChat (chatId) {
+      chats.findChatIndexById(chatId)
     },
     logOut (evt) {
       evt.preventDefault()
