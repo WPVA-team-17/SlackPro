@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import chatsStore from '../stores/chats'
 const chats = chatsStore()
 export default defineComponent({
   name: 'channel-conversation',
   setup () {
     return {
-      items: chats.currentChat.messages
+      items: computed(() => chats.currentChat.messages)
     }
   },
   methods: {

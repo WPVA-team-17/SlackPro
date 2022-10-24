@@ -14,7 +14,7 @@ const generateRandomString = (myLength: number) => {
 
 const generateRandomMessage = (id: string, senderId = 'none'):Message => {
   return {
-    id,
+    id: id + generateRandomString(5),
     senderId,
     text: generateRandomString(10),
     date: String(Date.now()),
