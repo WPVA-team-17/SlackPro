@@ -14,7 +14,7 @@
         label="E-mail"
         filled
         lazy-rules
-        :rules="['email' || 'Please type a valid e-mail']"
+        :rules="['email']"
         error-message="Please type a valid e-mail"
       />
       <q-input
