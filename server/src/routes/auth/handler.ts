@@ -1,5 +1,4 @@
 import { Login, Register, Route } from "../../";
-import bcrypt from "bcrypt";
 
 const register: Route = async (request, reply) => {
 	const { password, email, name, surname } = request.body as Register;
@@ -11,7 +10,7 @@ const register: Route = async (request, reply) => {
 	user = await request.prisma.user.create({
 		data: {
 			email,
-			password: await bcrypt.hash(password, 10),
+			password,
 			name,
 			surname,
 		},
@@ -28,7 +27,7 @@ const login: Route = async (request, reply) => {
 	const user = await request.prisma.user.findUnique({ where: { email } });
 	if (!user) { return reply.code(400).send({ message: "User doesn't exist" }); }
 	// Check if password is correct
-	if (!await bcrypt.compare(password, user.password)) { return reply.code(400).send({ message: "Password is incorrect" }); }
+	if (user.password !== password) { return reply.code(400).send({ message: "Password is incorrect" }); }
 	// Return token and user
 	const token = await reply.jwtSign({ id: user.id });
 	// TODO: return all chats related to user and make user status online
