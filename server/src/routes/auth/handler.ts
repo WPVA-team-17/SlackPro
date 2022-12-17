@@ -1,17 +1,17 @@
-import { Auth, Register, Route } from "../../";
+import { Login, Register, Route } from "../../";
 import bcrypt from "bcrypt";
 
 const register: Route = async (request, reply) => {
-	const { login, password, email, name, surname } = request.body as Register;
+	const { password, email, name, surname } = request.body as Register;
 	// Check if user already exists
-	let user = await request.prisma.user.findUnique({ where: { login } });
-	if (user) { return reply.code(400).send({ message: "User already exists" }); }
+	// Check if email already exists
+	let user = await request.prisma.user.findUnique({ where: { email } });
+	if (user) { return reply.code(400).send({ message: "Email already exists" }); }
 	// Create new user
 	user = await request.prisma.user.create({
 		data: {
-			login,
-			password: await bcrypt.hash(password, 10),
 			email,
+			password: await bcrypt.hash(password, 10),
 			name,
 			surname,
 		},
@@ -23,9 +23,9 @@ const register: Route = async (request, reply) => {
 };
 
 const login: Route = async (request, reply) => {
-	const { login, password } = request.body as Auth;
+	const { email, password } = request.body as Login;
 	// Check if user exists
-	const user = await request.prisma.user.findUnique({ where: { login } });
+	const user = await request.prisma.user.findUnique({ where: { email } });
 	if (!user) { return reply.code(400).send({ message: "User doesn't exist" }); }
 	// Check if password is correct
 	if (!await bcrypt.compare(password, user.password)) { return reply.code(400).send({ message: "Password is incorrect" }); }

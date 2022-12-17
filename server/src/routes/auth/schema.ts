@@ -14,41 +14,8 @@ const email = {
 	description: "Login or email schema",
 	type: "string",
 	format: "email",
-};
-
-const user = {
-	title: "User",
-	description: "User schema",
-	type: "object",
-	properties: {
-		id,
-		login: loginPassword,
-		email,
-	},
-	required: ["id", "login"],
-};
-
-const authRequest = {
-	type: "object",
-	properties: {
-		login: loginPassword,
-		password: loginPassword,
-		email,
-	},
-	required: ["login", "password", "email"],
-};
-
-const authReply = {
-	200: {
-		type: "object",
-		properties: {
-			token,
-			user,
-		},
-		required: ["token", "user"],
-	},
-	400: defaultReplyMsg,
-	500: defaultReplyMsg,
+	minLength: 6,
+	maxLength: 255,
 };
 
 const nameSurname = {
@@ -60,19 +27,40 @@ const nameSurname = {
 	default: "admin",
 };
 
-const registerRequest = {
+const user = {
+	title: "User",
+	description: "User schema",
 	type: "object",
 	properties: {
-		login: loginPassword,
-		password: loginPassword,
+		id,
 		email,
 		name: nameSurname,
 		surname: nameSurname,
 	},
-	required: ["login", "password", "email", "name", "surname"],
+	required: ["id", "email", "name", "surname"],
 };
 
-const registerReply = {
+const registerRequest = {
+	type: "object",
+	properties: {
+		email,
+		password: loginPassword,
+		name: nameSurname,
+		surname: nameSurname,
+	},
+	required: ["password", "email", "name", "surname"],
+};
+
+const loginRequest = {
+	type: "object",
+	properties: {
+		email,
+		password: loginPassword,
+	},
+	required: ["email", "password"],
+};
+
+const loginRegisterReply = {
 	200: {
 		type: "object",
 		properties: {
@@ -85,9 +73,9 @@ const registerReply = {
 	500: defaultReplyMsg,
 };
 
-const registerScheme = {
+const registerSchema = {
 	body: registerRequest,
-	response: registerReply,
+	response: loginRegisterReply,
 	tags: ["auth"],
 	summary: "Register schema",
 	description: "Register schema",
@@ -96,8 +84,8 @@ const registerScheme = {
 };
 
 const loginSchema = {
-	body: authRequest,
-	response: authReply,
+	body: loginRequest,
+	response: loginRegisterReply,
 	tags: ["auth"],
 	summary: "Login schema",
 	description: "Login schema",
@@ -105,4 +93,4 @@ const loginSchema = {
 	produces: ["application/json"],
 };
 
-export default { registerScheme, loginSchema };
+export default { registerSchema, loginSchema };

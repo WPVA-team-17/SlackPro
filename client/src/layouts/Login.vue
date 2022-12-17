@@ -1,11 +1,12 @@
 <template>
-      <q-form @submit="signIn" class="q-gutter-md signIn">
+      <q-form @submit="signIn" class="q-gutter-md login">
         <q-input
         v-model="nickname"
-        label="nickname"
+        label="Email"
         filled
         lazy-rules
-        :rules="[val => (val && val.length > 5) || 'Nickname should be at least 6 characters']"
+        :rules="['email']"
+        error-message="Please type a valid e-mail"
         />
         <q-input
         v-model="password"
@@ -40,14 +41,14 @@ export default defineComponent({
     },
     signUp (evt) {
       evt.preventDefault()
-      this.$router.push('/signup')
+      this.$router.push('/register')
     }
   }
 })
 </script>
 
-<style>
-.signIn {
+<style scoped>
+.login{
   height: 50%;
   width: 70%;
   margin: auto;

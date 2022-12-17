@@ -1,10 +1,17 @@
 <!-- Create registration layout -->
 <template>
   <div>
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md register">
       <q-input
         v-model="name"
         label="Name"
+        filled
+        lazy-rules
+        :rules="[ val => val.length > 5 || 'Name should be at least 6 characters' ]"
+      />
+      <q-input
+        v-model="surname"
+        label="Surname"
         filled
         lazy-rules
         :rules="[ val => val.length > 5 || 'Name should be at least 6 characters' ]"
@@ -43,21 +50,50 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { api } from 'boot/axios'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
+console.log('ASAAAAAAAAAAAAAAAA', $q)
 export default defineComponent({
-  name: 'SignUp',
+  name: 'RegisterPage',
   data () {
     return {
       name: '',
+      surname: '',
       email: '',
       password: '',
       passwordConfirm: ''
     }
   },
   methods: {
-    onSubmit (evt) {
+    async onSubmit (evt) {
       evt.preventDefault()
-      this.$router.push('/main')
+      await api.post('/register', {
+        name: this.name,
+        surname: this.surname,
+        email: this.email,
+        password: this.password
+      })
+        .then(response => {
+          $q.notify({
+            message: `Success: ${response}`,
+            color: 'positive',
+            position: 'top',
+            icon: 'check_circle',
+            timeout: 80000
+          })
+        })
+        .catch(_error => {
+          $q.notify({
+            message: `Error: ${_error}`,
+            color: 'negative',
+            position: 'top',
+            timeout: 2000
+          })
+        }
+        )
+      // this.$router.push('/main')
     },
     onReset () {
       this.name = ''
@@ -68,3 +104,11 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.register{
+  width: 70%;
+  margin: auto;
+  margin-top: 10%;
+}
+</style>

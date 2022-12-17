@@ -52,7 +52,7 @@ export default defineComponent({
     },
     logOut (evt) {
       evt.preventDefault()
-      this.$router.push('/signin')
+      this.$router.push('/login')
     }
   }
 })

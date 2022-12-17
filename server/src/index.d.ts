@@ -39,8 +39,8 @@ export type Register = {
     surname: string;
 }
 
-export type Auth = {
-    login: string;
+export type Login= {
+    email: string;
     password: string;
 }
 
