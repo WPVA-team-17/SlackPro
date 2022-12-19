@@ -89,4 +89,22 @@ const idParam = {
 	},
 };
 
-export { text, id, bearerAuth, token, defaultReply, task, defaultReplyMsg, deadline, status, idParam };
+const loginPassword = {
+	title: "Login or password",
+	description: "Login or password schema",
+	type: "string",
+	minLength: 3,
+	maxLength: 20,
+	default: "admin",
+};
+
+const nameSurname = {
+	title: "Name or surname",
+	description: "Name or surname schema",
+	type: "string",
+	minLength: 3,
+	maxLength: 20,
+	default: "admin",
+};
+
+export { text, id, bearerAuth, token, defaultReply, task, defaultReplyMsg, deadline, status, idParam, loginPassword, nameSurname };

@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { ChatType, PrismaClient } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 export type Request = FastifyRequest<{
@@ -34,13 +34,22 @@ export type PostTaskData = {
 export type Register = {
     login: string;
     password: string;
-    email: string;
     name: string;
     surname: string;
 }
 
+export type ChatDelete = {
+    id: string;
+}
+
+export type ChatCreate = {
+    name: string;
+    ownerId: string;
+    type: ChatType;
+}
+
 export type Login= {
-    email: string;
+    login: string;
     password: string;
 }
 

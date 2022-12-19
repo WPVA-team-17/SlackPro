@@ -8,9 +8,9 @@
   "module": "es2022",
   "scripts": {
     "test": "jest",
-    "dev": " tsc && node built/app.js",
+    "dev": "  npx prisma migrate dev --name init && tsc && node built/app.js",
     "ts": "tsc src/app.ts",
-    "start": "npx prisma migrate dev --name init; tsc; node built/app.js"
+    "start": "npx prisma migrate dev --name init ;  tsc ;  node built/app.js"
   },
   "keywords": [
     "todo-list",
@@ -23,6 +23,7 @@
     "@fastify/autoload": "^5.6.0",
     "@fastify/jwt": "^6.5.0",
     "@fastify/swagger": "^8.2.1",
+    "@fastify/websocket": "^7.1.1",
     "@prisma/client": "^4.7.1",
     "fastify": "^4.3.0",
     "fastify-plugin": "^4.4.0",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.16",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
     "eslint": "^8.30.0",

@@ -20,7 +20,6 @@ async function startServer(options: FastifyServerOptions = {}) {
 		dir: path.join(__dirname, "routes"),
 		forceESM: true,
 	});
-
 	await server.ready();
 	return server;
 }

@@ -1,31 +1,5 @@
-import { defaultReplyMsg, id, token } from "../../plugins/schema.js";
-
-const loginPassword = {
-	title: "Login or password",
-	description: "Login or password schema",
-	type: "string",
-	minLength: 3,
-	maxLength: 20,
-	default: "admin",
-};
-
-const email = {
-	title: "Email",
-	description: "Login or email schema",
-	type: "string",
-	format: "email",
-	minLength: 6,
-	maxLength: 255,
-};
-
-const nameSurname = {
-	title: "Name or surname",
-	description: "Name or surname schema",
-	type: "string",
-	minLength: 3,
-	maxLength: 20,
-	default: "admin",
-};
+import { defaultReplyMsg, id, loginPassword, nameSurname, token } from "../../plugins/schema.js";
+import { chatArray } from "../../plugins/chat/schema.js";
 
 const user = {
 	title: "User",
@@ -33,31 +7,31 @@ const user = {
 	type: "object",
 	properties: {
 		id,
-		email,
+		login: loginPassword,
 		name: nameSurname,
 		surname: nameSurname,
 	},
-	required: ["id", "email", "name", "surname"],
+	required: ["id", "login", "name", "surname"],
 };
 
 const registerRequest = {
 	type: "object",
 	properties: {
-		email,
+		login: loginPassword,
 		password: loginPassword,
 		name: nameSurname,
 		surname: nameSurname,
 	},
-	required: ["password", "email", "name", "surname"],
+	required: ["password", "login", "name", "surname"],
 };
 
 const loginRequest = {
 	type: "object",
 	properties: {
-		email,
+		login: loginPassword,
 		password: loginPassword,
 	},
-	required: ["email", "password"],
+	required: ["login", "password"],
 };
 
 const loginRegisterReply = {
@@ -66,8 +40,9 @@ const loginRegisterReply = {
 		properties: {
 			token,
 			user,
+			chats: chatArray,
 		},
-		required: ["token", "user"],
+		required: ["token", "user", "chats"],
 	},
 	400: defaultReplyMsg,
 	500: defaultReplyMsg,
