@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr fFf" ref="ScrollContainer">
+  <q-layout view="hHh LpR fFf" ref="ScrollContainer">
 
     <q-drawer show-if-above side="left" bordered elevated >
       <chats-list />
@@ -13,6 +13,9 @@
         <main-input @cliInput="onCLIinput" class="cli"/>
     </q-footer>
 
+    <q-drawer show-if-above side="right" bordered elevated >
+      <typing-message />
+    </q-drawer>
   </q-layout>
 </template>
 
@@ -21,6 +24,7 @@ import { defineComponent, ref } from 'vue'
 import ChatsList from 'src/components/ChatsList.vue'
 import MainInput from '../components/MainInput.vue'
 import ChannelConversation from '../components/ChannelConversation.vue'
+import TypingMessage from 'src/components/TypingMessage.vue'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -28,7 +32,8 @@ export default defineComponent({
   components: {
     ChatsList,
     MainInput,
-    ChannelConversation
+    ChannelConversation,
+    TypingMessage
   },
 
   setup () {
