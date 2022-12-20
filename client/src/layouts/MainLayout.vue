@@ -43,7 +43,7 @@ export default defineComponent({
   },
   methods: {
     async onCLIinput (messsage: string) {
-      await (this.$refs.conversation as any).addMessage(messsage)
+      await (this.$refs.conversation as {addMessage: (msg: string) => Promise<void> }).addMessage(messsage)
       window.scrollBy(0, 1000)
     }
   }

@@ -7,29 +7,29 @@
         label="Name"
         filled
         lazy-rules
-        :rules="[ val => val.length > 5 || 'Name should be at least 6 characters' ]"
+        :rules="[ val => val.length > 4 || 'Name should be at least 5 characters' ]"
       />
       <q-input
         v-model="surname"
         label="Surname"
         filled
         lazy-rules
-        :rules="[ val => val.length > 5 || 'Name should be at least 6 characters' ]"
+        :rules="[ val => val.length > 4 || 'Name should be at least 5 characters' ]"
       />
       <q-input
-        v-model="email"
-        label="E-mail"
+        v-model="login"
+        label="Login"
         filled
         lazy-rules
-        :rules="['email']"
-        error-message="Please type a valid e-mail"
+        :rules="[val => val.length > 4 || 'Name should be at least 5 characters']"
+        error-message="Please type a valid login"
       />
       <q-input
         v-model="password"
         label="Password"
         filled
         lazy-rules
-        :rules="[ val => val.length > 5 || 'Password should be at least 6 characters' ]"
+        :rules="[ val => val.length > 4 || 'Password should be at least 5 characters' ]"
         type="password"
       />
       <q-input
@@ -37,7 +37,7 @@
         label="Confirm password"
         filled
         lazy-rules
-        :rules="[ val => val.length > 5 || 'Password should be at least 6 characters' ]"
+        :rules="[ val => val.length > 4 || 'Password should be at least 5 characters' ]"
         type="password"
       />
       <div>
@@ -50,18 +50,19 @@
 
 <script>
 import { defineComponent } from 'vue'
+import chatsStore from '../stores/chats'
 import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
 
-const $q = useQuasar()
-console.log('ASAAAAAAAAAAAAAAAA', $q)
+const chats = chatsStore()
 export default defineComponent({
   name: 'RegisterPage',
   data () {
+    const $q = useQuasar()
     return {
       name: '',
       surname: '',
-      email: '',
+      login: '',
       password: '',
       passwordConfirm: ''
     }
@@ -69,31 +70,25 @@ export default defineComponent({
   methods: {
     async onSubmit (evt) {
       evt.preventDefault()
-      await api.post('/register', {
+      api.post('auth/register', {
+        login: this.login,
         name: this.name,
         surname: this.surname,
-        email: this.email,
         password: this.password
       })
         .then(response => {
-          $q.notify({
-            message: `Success: ${response}`,
-            color: 'positive',
-            position: 'top',
-            icon: 'check_circle',
-            timeout: 80000
-          })
+          // Add chats to store
+          chats.setChats(response.data.chats)
+          this.$router.push('/main')
         })
-        .catch(_error => {
-          $q.notify({
-            message: `Error: ${_error}`,
+        .catch(error => {
+          this.$q.notify({
+            message: `${error.response.data.message}`,
             color: 'negative',
             position: 'top',
-            timeout: 2000
+            timeout: 5000
           })
-        }
-        )
-      // this.$router.push('/main')
+        })
     },
     onReset () {
       this.name = ''

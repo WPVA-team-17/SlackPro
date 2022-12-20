@@ -1,11 +1,11 @@
 <template>
-      <q-form @submit="signIn" class="q-gutter-md login">
+      <q-form @submit="onLogin" class="q-gutter-md login">
         <q-input
-        v-model="nickname"
-        label="Email"
+        v-model="login"
+        label="Login"
         filled
         lazy-rules
-        :rules="['email']"
+        :rules="[val => (val && val.length > 4) || 'Password should be at least 5 characters']"
         error-message="Please type a valid e-mail"
         />
         <q-input
@@ -13,33 +13,65 @@
         label="Password"
         filled
         lazy-rules
-        :rules="[val => (val && val.length > 5) || 'Password should be at least 6 characters']"
+        :rules="[val => (val && val.length > 4) || 'Password should be at least 5 characters']"
         type="password"
         />
-        <q-btn type="submit" color="primary" label="Sign In" style="float: right"/>
-        <q-btn type="submit" color="primary" label="Sign Up" @click="signUp" />
+        <q-btn type="submit" color="primary" label="Login"    @click="onLogin" style="float: right"/>
+        <q-btn type="submit" color="primary" label="Register" @click="register" />
       </q-form>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { api } from 'boot/axios'
+import { useQuasar } from 'quasar'
+import chatsStore from '../stores/chats'
+
+const chats = chatsStore()
 
 export default defineComponent({
   name: 'LoginPage',
   setup () {
-    const username = ref('')
-    const password = ref('')
+    const $q = useQuasar()
     return {
-      nickname: username,
-      password
+      login: ref(''),
+      password: ref('')
     }
   },
   methods: {
-    signIn (evt) {
+    onLogin (evt) {
       evt.preventDefault()
-      this.$router.push('/main')
+      if (!this.login || !this.password) {
+        this.$q.notify({
+          message: 'Please fill all fields',
+          color: 'negative',
+          position: 'top',
+          timeout: 80000
+        })
+        return
+      }
+
+      api.post('auth/login', {
+        login: this.login,
+        password: this.password
+      })
+        .then(response => {
+          chats.setChats(response.data.chats)
+          console.log(response.data.token)
+          localStorage.setItem('token', response.data.token)
+          api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`
+          this.$router.push('/main')
+        })
+        .catch(error => {
+          this.$q.notify({
+            message: `${error.response.data.message}`,
+            color: 'negative',
+            position: 'top',
+            timeout: 5000
+          })
+        })
     },
-    signUp (evt) {
+    register (evt) {
       evt.preventDefault()
       this.$router.push('/register')
     }
