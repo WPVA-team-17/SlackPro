@@ -35,6 +35,9 @@ async function startServer(options: FastifyServerOptions = {}) {
 		server.log.warn(`Socket connected: ${socket.id}`);
 		socket.on("message", async (data: MessageRequest) => {
 			const { text, chatId, userId } = data;
+			if (!text || !chatId || !userId) {
+				return;
+			}
 			server.log.warn(`Message received: ${text}`);
 			ALL_SOCKETS.set(socket.id, userId);
 			const messageDB = await server.prisma.message.create({
