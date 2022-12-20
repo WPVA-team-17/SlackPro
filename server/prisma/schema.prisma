@@ -11,15 +11,14 @@ datasource db {
 }
 
 model User {
-  id       String    @id @default(cuid())
-  password String
-  login    String    @unique
-  name     String
-  surname  String
-  chatId   String?
-  chats    Chat[]    @relation("participants")
-  Message  Message[]
-  Chat     Chat[]    @relation("owner")
+  id          String    @id @default(cuid())
+  password    String
+  login       String    @unique
+  name        String
+  surname     String
+  participant Chat[]    @relation("participants")
+  message     Message[]
+  owner       Chat[]    @relation("owner")
 }
 
 model Message {
@@ -28,15 +27,15 @@ model Message {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  Chat      Chat?    @relation(fields: [chatId], references: [id])
-  chatId    String?
+  chat      Chat     @relation(fields: [chatId], references: [id], name: "chat")
+  chatId    String
 }
 
 model Chat {
   id           String    @id @default(cuid())
   name         String    @unique
   createdAt    DateTime  @default(now())
-  messages     Message[]
+  messages     Message[] @relation("chat")
   participants User[]    @relation("participants")
   type         ChatType
   lastMsgTime  DateTime?
