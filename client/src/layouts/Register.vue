@@ -52,13 +52,11 @@
 import { defineComponent } from 'vue'
 import chatsStore from '../stores/chats'
 import { api } from 'boot/axios'
-import { useQuasar } from 'quasar'
 
 const chats = chatsStore()
 export default defineComponent({
   name: 'RegisterPage',
   data () {
-    const $q = useQuasar()
     return {
       name: '',
       surname: '',

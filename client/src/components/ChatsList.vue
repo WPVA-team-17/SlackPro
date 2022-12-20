@@ -17,7 +17,7 @@
         @click="selectChat(item.id)"
       >
         <q-item-section>
-          <q-item-label overline>{{ item.id }}</q-item-label>
+          <q-item-label overline>{{ item.name }}</q-item-label>
         </q-item-section>
 
         <q-item-section avatar>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import chatsStore from '../stores/chats'
 import ConfirmExit from './ConfirmExit.vue'
 import OnlineStatus from './OnlineStatus.vue'
@@ -43,7 +43,7 @@ export default defineComponent({
   },
   setup () {
     return {
-      items: chats.getChats
+      items: computed(() => chats.getChats || [])
     }
   },
   methods: {

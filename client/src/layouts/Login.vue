@@ -24,18 +24,17 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { api } from 'boot/axios'
-import { useQuasar } from 'quasar'
 import chatsStore from '../stores/chats'
+import { startSocket } from './../stores/socket'
 
 const chats = chatsStore()
 
 export default defineComponent({
   name: 'LoginPage',
   setup () {
-    const $q = useQuasar()
     return {
-      login: ref(''),
-      password: ref('')
+      login: ref('misha'),
+      password: ref('misha')
     }
   },
   methods: {
@@ -46,7 +45,7 @@ export default defineComponent({
           message: 'Please fill all fields',
           color: 'negative',
           position: 'top',
-          timeout: 80000
+          timeout: 8000
         })
         return
       }
@@ -55,16 +54,18 @@ export default defineComponent({
         login: this.login,
         password: this.password
       })
-        .then(response => {
+        .then(async response => {
+          console.warn(JSON.stringify(response.data))
+          startSocket(response.data)
+          await chats.setUserId(response.data.userId)
           chats.setChats(response.data.chats)
-          console.log(response.data.token)
-          localStorage.setItem('token', response.data.token)
           api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`
+          console.log(response.data.token)
           this.$router.push('/main')
         })
         .catch(error => {
           this.$q.notify({
-            message: `${error.response.data.message}`,
+            message: `${error.response?.data?.message || 'Not connected to server'}`,
             color: 'negative',
             position: 'top',
             timeout: 5000

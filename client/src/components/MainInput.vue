@@ -22,14 +22,15 @@
 </template>
 
 <script lang="ts">
-import { useQuasar } from 'quasar'
+import { MessageRequest } from 'frontEnd'
 import { api } from 'src/boot/axios'
 import { defineComponent, ref } from 'vue'
+import chatsStore from '../stores/chats'
 
+const chats = chatsStore()
 export default defineComponent({
   name: 'MainInput',
   setup () {
-    const $q = useQuasar()
     return {
       CLIinput: ref('')
     }
@@ -40,7 +41,7 @@ export default defineComponent({
       if (this.CLIinput.startsWith('/')) {
         this.onCommand()
       } else {
-        this.onMessage(this.CLIinput)
+        this.onMessage()
       }
     },
     onCommand () {
@@ -66,6 +67,7 @@ export default defineComponent({
         isPrivate
       })
         .then(response => {
+          chats.addChat(response.data.chat)
           this.$q.notify({
             message: response.data.message,
             color: 'green-3',
@@ -83,8 +85,13 @@ export default defineComponent({
           })
         })
     },
-    onMessage (message: string) {
-      this.$emit('cliMessage', message)
+    onMessage () {
+      this.$socket.emit('message', {
+        text: this.CLIinput,
+        chatId: chats.currentChat?.id,
+        userId: chats.getUserId
+      } as MessageRequest)
+      this.CLIinput = ''
     },
     checkInput (text: string | number | null) {
       if (typeof text === 'string' && text.startsWith('/')) {

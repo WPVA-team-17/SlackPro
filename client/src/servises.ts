@@ -17,7 +17,7 @@ const generateRandomMessage = (id: string, senderId = 'none'):Message => {
     id: id + generateRandomString(5),
     senderId,
     text: generateRandomString(10),
-    date: String(Date.now()),
+    createdAt: new Date(),
     isRead: Boolean(Math.round(Math.random()))
   }
 }

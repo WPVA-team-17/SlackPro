@@ -9,7 +9,8 @@
       v-for="item in items" :key="item.id"
       :name="item.senderId"
       :text="[item.text]"
-      :stamp="(new Date(Number(item.date))).toUTCString()"
+      :stamp="String(item?.createdAt)"
+      :sent="item.senderId === myId"
     />
   </q-infinite-scroll>
 </template>
@@ -24,20 +25,10 @@ export default defineComponent({
   name: 'channel-conversation',
   setup () {
     return {
+      myId: chats.getUserId,
       items: computed(() => chats.currentChat?.messages || [])
     }
-  },
-  methods: {
-    addMessage (message: string) {
-      // await api call
-      chats.currentChat?.messages.push({
-        id: '0',
-        senderId: 'me',
-        text: message,
-        date: String(Date.now()),
-        isRead: true
-      })
-    }
   }
-})
+}
+)
 </script>

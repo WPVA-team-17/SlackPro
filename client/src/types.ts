@@ -9,10 +9,24 @@ declare module 'frontEnd' {
     email: string
   }
 
+  export type MessageResponse = {
+    text: string,
+    chatId: string,
+    userId: string,
+    createdAt: Date,
+    id: string
+  }
+
+  export type MessageRequest = {
+    text: string,
+    chatId: string,
+    userId: string,
+  }
+
   export type Message = {
     id: string;
     text: string;
-    date: string;
+    createdAt: Date;
     isRead: boolean;
     senderId: string;
   }
