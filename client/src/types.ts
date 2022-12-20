@@ -25,4 +25,10 @@ declare module 'frontEnd' {
     isPrivate: boolean;
     messages: Message[];
   }
+
+  export type ChatJoinRequest = {
+    name: string;
+    isPrivate: boolean;
+  }
+
 }

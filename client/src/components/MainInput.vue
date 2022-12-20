@@ -22,11 +22,14 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar'
+import { api } from 'src/boot/axios'
 import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'MainInput',
   setup () {
+    const $q = useQuasar()
     return {
       CLIinput: ref('')
     }
@@ -34,10 +37,54 @@ export default defineComponent({
   methods: {
     onSubmit (evt: Event) {
       evt.preventDefault()
-      if (this.CLIinput !== '') {
-        this.$emit('cliInput', this.CLIinput)
-        this.CLIinput = ''
+      if (this.CLIinput.startsWith('/')) {
+        this.onCommand()
+      } else {
+        this.onMessage(this.CLIinput)
       }
+    },
+    onCommand () {
+      if (this.CLIinput.startsWith('/join')) {
+        this.onJoin()
+      }
+
+      // Clear input
+      this.CLIinput = ''
+    },
+    onJoin () {
+      const chatName = this.CLIinput.split(' ')[1]
+      const isPrivate = this.CLIinput.split(' ')[2] === 'private'
+      this.$q.notify({
+        message: `Joining ${chatName} chat as ${isPrivate ? 'private' : 'public'}`,
+        color: 'green-3',
+        textColor: 'white',
+        icon: 'check_circle',
+        position: 'top'
+      })
+      api.post('chat', {
+        name: chatName,
+        isPrivate
+      })
+        .then(response => {
+          this.$q.notify({
+            message: response.data.message,
+            color: 'green-3',
+            textColor: 'white',
+            icon: 'check_circle',
+            position: 'top'
+          })
+        })
+        .catch(error => {
+          this.$q.notify({
+            message: error.response.data.message,
+            color: 'negative',
+            position: 'top',
+            timeout: 80000
+          })
+        })
+    },
+    onMessage (message: string) {
+      this.$emit('cliMessage', message)
     },
     checkInput (text: string | number | null) {
       if (typeof text === 'string' && text.startsWith('/')) {

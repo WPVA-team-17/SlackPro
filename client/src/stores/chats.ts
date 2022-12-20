@@ -1,14 +1,12 @@
 import { Chat } from 'frontEnd'
 import { defineStore } from 'pinia'
-import { generateConversations } from 'src/servises'
 
 export default defineStore('chatsStore', {
   state: () => {
-    const chats: Chat[] = generateConversations(4)
     return {
-      chats,
+      chats: [] as Chat[],
       currentChatIndex: 0,
-      current: chats[0]
+      current: null as Chat | null
     }
   },
   getters: {
@@ -22,6 +20,11 @@ export default defineStore('chatsStore', {
     findChatIndexById (id: string) {
       this.currentChatIndex = this.getChats.findIndex((item) => item.id === id)
       this.current = this.getChats[this.currentChatIndex]
+    },
+    setChats (chats: Chat[]) {
+      this.chats = chats
+      this.currentChatIndex = 0
+      this.current = this.chats[0]
     }
   }
 })
