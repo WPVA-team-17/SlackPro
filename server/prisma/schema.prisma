@@ -36,7 +36,7 @@ model Chat {
   id           String    @id @default(cuid())
   name         String    @unique
   createdAt    DateTime  @default(now())
-  Message      Message[]
+  messages     Message[]
   participants User[]    @relation("participants")
   type         ChatType
   lastMsgTime  DateTime?
