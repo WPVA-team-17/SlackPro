@@ -17,7 +17,21 @@ const register: Route = async (request, reply) => {
 	// Return token and user
 	const token = await reply.jwtSign({ id: user.id });
 
-	reply.code(200).send({ token, user });
+	const chats = await request.prisma.chat.findMany({
+		where: {
+			participants: {
+				some: {
+					id: user.id,
+				},
+			},
+		},
+		include: {
+			participants: true,
+			messages: true,
+		},
+	});
+
+	reply.code(200).send({ token, user, chats });
 };
 
 const login: Route = async (request, reply) => {
@@ -38,6 +52,10 @@ const login: Route = async (request, reply) => {
 					id: user.id,
 				},
 			},
+		},
+		include: {
+			participants: true,
+			messages: true,
 		},
 	});
 
