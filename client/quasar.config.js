@@ -56,7 +56,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash' // available values: 'hash', 'history'
+      vueRouterMode: 'hash', // available values: 'hash', 'history'
 
       // transpile: false,
       // publicPath: '/',
@@ -70,7 +70,7 @@ module.exports = configure(function (ctx) {
       // preloadChunks: true,
       // showProgress: false,
       // gzip: true,
-      // analyze: true,
+      analyze: true
 
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
@@ -95,24 +95,9 @@ module.exports = configure(function (ctx) {
         'Notify'
       ],
       config: {
-        notify: {
-          position: 'bottom',
-          timeout: 25000,
-          textColor: 'red'
-        }
-      },
-
-      iconSet: 'material-icons', // Quasar icon set
-      lang: 'en-US', // Quasar language pack
-
-      // For special cases outside of where the auto-import strategy can have an impact
-      // (like functional components as one of the examples),
-      // you can manually specify Quasar components/directives to be available everywhere:
-      //
-      // components: [],
-      // directives: [],
-
-      // Quasar plugins
+        notify: { /* look at QuasarConfOptions from the API card */ }
+      }
+      // autoImportComponentCase: 'pascal' // or 'kebab' (default) or 'combined'
     },
 
     // animations: 'all', // --- includes all animations

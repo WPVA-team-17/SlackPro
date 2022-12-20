@@ -17,18 +17,20 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import chatsStore from '../stores/chats'
+
 const chats = chatsStore()
+
 export default defineComponent({
   name: 'channel-conversation',
   setup () {
     return {
-      items: computed(() => chats.currentChat.messages)
+      items: computed(() => chats.currentChat?.messages || [])
     }
   },
   methods: {
     addMessage (message: string) {
       // await api call
-      chats.currentChat.messages.push({
+      chats.currentChat?.messages.push({
         id: '0',
         senderId: 'me',
         text: message,
