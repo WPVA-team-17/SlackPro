@@ -9,6 +9,20 @@ export type GetChatRequest = FastifyRequest<{
   };
 }>;
 
+export type MessageRequest = {
+    text: string,
+    chatId: string,
+    userId: string,
+}
+
+export type MessageResponse = {
+  text: string,
+  chatId: string,
+  userId: string,
+  createdAt: Date,
+  id: string
+}
+
 export type SocketMessage = {
   id?: string;
   text: string;
