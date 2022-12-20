@@ -1,10 +1,10 @@
 const text = {
 	title: "Text",
-	description: "Basic text schema",
+	description: "Text schema",
 	type: "string",
 	minLength: 1,
-	maxLength: 255,
-	default: "Any text here",
+	maxLength: 1000,
+	default: "Hello world!",
 };
 
 const id = {
@@ -50,33 +50,6 @@ const defaultReply = {
 	500: defaultReplyMsg,
 };
 
-const deadline = {
-	type: "string",
-	format: "date-time",
-	description: "The deadline of the task",
-	default: "2020-01-01T00:00:00.000Z",
-};
-
-const status = {
-	enum: ["DONE", "CLOSED", "ACTIVE", "IN_PROGRESS"],
-	description: "The status of the task",
-};
-
-const task = {
-	title: "listSchema",
-	description: "List",
-	type: "object",
-	properties: {
-		id,
-		title: text,
-		body: text,
-		authorId: id,
-		deadline,
-		listId: id,
-		status,
-	},
-};
-
 const idParam = {
 	name: "id",
 	in: "path",
@@ -107,4 +80,72 @@ const nameSurname = {
 	default: "admin",
 };
 
-export { text, id, bearerAuth, token, defaultReply, task, defaultReplyMsg, deadline, status, idParam, loginPassword, nameSurname };
+
+const createdAt = {
+	title: "Created at",
+	description: "Created at schema",
+	type: "string",
+	format: "date-time",
+	default: new Date().toISOString(),
+};
+
+const message = {
+	title: "Chat message",
+	description: "Chat message schema",
+	type: "object",
+	properties: {
+		id,
+		chatId: id,
+		userId: id,
+		text,
+		createdAt,
+	},
+	required: ["id", "chatId", "userId", "text", "createdAt"],
+};
+
+const chatName = {
+	title: "Chat name",
+	description: "Chat name schema",
+	type: "string",
+	minLength: 3,
+	maxLength: 20,
+	default: "Chat name",
+};
+
+const participant = {
+	title: "Participant",
+	description: "Participant schema",
+	type: "object",
+	properties: {
+		id,
+		name: nameSurname,
+		login: loginPassword,
+	},
+	required: ["id", "name", "login"],
+};
+
+const chat = {
+	title: "Chat",
+	description: "Chat schema",
+	type: "object",
+	properties: {
+		id,
+		name: chatName,
+		participants: {
+			type: "array",
+			items: participant,
+		},
+		messages: {
+			type: "array",
+			items: message,
+		},
+	},
+	required: ["id", "name", "participants", "messages"],
+};
+
+const chatArray = {
+	type: "array",
+	items: chat,
+};
+
+export { text, id, bearerAuth, token, defaultReply, defaultReplyMsg, idParam, loginPassword, nameSurname, chatArray, chat, message, createdAt, chatName, participant };

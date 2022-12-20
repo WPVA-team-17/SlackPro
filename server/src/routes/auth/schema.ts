@@ -1,5 +1,4 @@
-import { defaultReplyMsg, id, loginPassword, nameSurname, token } from "../../plugins/schema.js";
-import { chatArray } from "../../plugins/chat/schema.js";
+import { chatArray, defaultReplyMsg, id, loginPassword, nameSurname, token } from "../../plugins/schema.js";
 
 const user = {
 	title: "User",

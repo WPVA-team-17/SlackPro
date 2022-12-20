@@ -4,10 +4,11 @@ const options: FastifyServerOptions = {
 	logger: {
 		transport: {
 			target: "pino-pretty",
-			options: {
-				translateTime: "HH:MM:ss Z",
-				ignore: "pid,hostname,remoteAdress,remotePort,reqId,remoteAdress,hostname,remotePort",
-			},
+			// options: {
+			// 	translateTime: "HH:MM:ss Z",
+			// 	// ignore: "pid,remoteAdress,remotePort,reqId,remoteAdress,hostname,remotePort",
+			// 	defaultLevel: "debug",
+			// },
 		},
 	},
 	ajv: {
@@ -16,7 +17,7 @@ const options: FastifyServerOptions = {
 			removeAdditional: true,
 			useDefaults: false,
 			coerceTypes: false,
-			allErrors: false,
+			allErrors: true,
 		},
 	},
 };

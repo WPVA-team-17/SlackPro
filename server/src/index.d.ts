@@ -1,5 +1,23 @@
-import { ChatType, PrismaClient } from "@prisma/client";
+import { SocketStream } from "@fastify/websocket";
+import { PrismaClient } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
+
+export type GetChatRequest = FastifyRequest<{
+  Body: {
+    name: string;
+    isPrivate: boolean;
+  };
+}>;
+
+export type SocketMessage = {
+  id?: string;
+  text: string;
+  authorId: string;
+  chatId: string;
+  createdAd?: Date;
+};
+
+export type SocketHandler = (connection: SocketStream, req: FastifyRequest) => void;
 
 export type Request = FastifyRequest<{
   Body: {
@@ -11,25 +29,14 @@ export type Request = FastifyRequest<{
     deadline?: string | Date,
     login?: string,
     password?: string,
-    };
-    Params: {
+  };
+  Params: {
     id?: string;
   }
 }>
 
+export type GetChat = (request: GetChatRequest, reply: FastifyReply) => Promise<void>;
 export type Route = (request: Request, reply: FastifyReply) => Promise<void>;
-
-export type taskData = {
-    title?: string;
-    body?: string;
-    deadline?: string | Date;
-}
-
-export type PostTaskData = {
-    title: string;
-    body: string;
-    deadline: string | Date;
-}
 
 export type Register = {
     login: string;
@@ -38,27 +45,10 @@ export type Register = {
     surname: string;
 }
 
-export type ChatDelete = {
-    id: string;
-}
-
-export type ChatCreate = {
-    name: string;
-    ownerId: string;
-    type: ChatType;
-}
-
 export type Login= {
     login: string;
     password: string;
 }
-
-export type PostTask = {
-    listId: string,
-    title: string,
-    body: string,
-    deadline: string,
-};
 
 declare module "fastify"{
   interface FastifyRequest{
@@ -73,14 +63,9 @@ declare module "fastify"{
             listId: string;
             authorId: string;
   },
-        data: taskData,
-    taskValidator(request: Request, reply: FastifyReply): Promise<void>,
   }
   interface FastifyInstance{
         prisma: PrismaClient,
-        isListExists(request: FastifyRequest, reply: FastifyReply): Promise<void>;
-        isSubscribed: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
-        isTaskExists(request: FastifyRequest, reply: FastifyReply): Promise<void>;
         authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   }
 }
