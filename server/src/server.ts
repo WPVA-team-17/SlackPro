@@ -7,15 +7,23 @@ import fastifySwaggerOptions from "./plugins/swaggerDocs.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import autoLoad from "@fastify/autoload";
+import fastifyWebsocket from "@fastify/websocket";
+import cors from "@fastify/cors";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 async function startServer(options: FastifyServerOptions = {}) {
 	const server = fastify(options);
 	server.setErrorHandler(errorHandler);
+	server.register(cors, {
+		origin: "*",
+		methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+		allowedHeaders: ["Content-Type", "Authorization"],
+	});
 	server.register(fastifySwagger, fastifySwaggerOptions);
 	server.register(prismaPlugin);
 	server.register(jwtPlugin);
+	server.register(fastifyWebsocket);
 	server.register(autoLoad, {
 		dir: path.join(__dirname, "routes"),
 		forceESM: true,
