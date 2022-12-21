@@ -15,9 +15,10 @@ const options: FastifyServerOptions = {
 		customOptions: {
 			strict: true,
 			removeAdditional: true,
-			useDefaults: false,
+			useDefaults: "empty",
 			coerceTypes: false,
 			allErrors: true,
+			verbose: true,
 		},
 	},
 };
