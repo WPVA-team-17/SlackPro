@@ -21,6 +21,10 @@ export type MessageResponse = {
   userId: string,
   createdAt: Date,
   id: string
+  user: {
+    id: string,
+    login: string,
+  }
 }
 
 export type SocketMessage = {

@@ -53,9 +53,31 @@ const login: Route = async (request, reply) => {
 				},
 			},
 		},
-		include: {
-			participants: true,
-			messages: true,
+		select: {
+			id: true,
+			name: true,
+			participants: {
+				select: {
+					id: true,
+					name: true,
+					surname: true,
+				},
+			},
+			messages: {
+				select: {
+					id: true,
+					text: true,
+					chatId: true,
+					createdAt: true,
+					userId: true,
+					user: {
+						select: {
+							id: true,
+							login: true,
+						},
+					},
+				},
+			},
 		},
 	});
 

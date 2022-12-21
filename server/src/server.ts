@@ -36,8 +36,10 @@ async function startServer(options: FastifyServerOptions = {}) {
 		socket.on("message", async (data: MessageRequest) => {
 			const { text, chatId, userId } = data;
 			if (!text || !chatId || !userId) {
+				console.warn("Invalid message received", data);
 				return;
 			}
+			console.warn(`Message received: ${data}`);
 			server.log.warn(`Message received: ${text}`);
 			ALL_SOCKETS.set(socket.id, userId);
 			const messageDB = await server.prisma.message.create({
@@ -51,6 +53,18 @@ async function startServer(options: FastifyServerOptions = {}) {
 					user: {
 						connect: {
 							id: userId,
+						},
+					},
+				},
+				select: {
+					id: true,
+					text: true,
+					createdAt: true,
+					chatId: true,
+					user: {
+						select: {
+							id: true,
+							login: true,
 						},
 					},
 				},

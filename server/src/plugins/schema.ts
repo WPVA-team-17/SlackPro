@@ -99,6 +99,14 @@ const message = {
 		userId: id,
 		text,
 		createdAt,
+		user: {
+			type: "object",
+			properties: {
+				id,
+				login: loginPassword,
+			},
+			required: ["id", "login"],
+		},
 	},
 	required: ["id", "chatId", "userId", "text", "createdAt"],
 };
