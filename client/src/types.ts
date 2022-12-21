@@ -15,6 +15,10 @@ declare module 'frontEnd' {
     userId: string,
     createdAt: Date,
     id: string
+    user: {
+      id: string,
+      login: string,
+    }
   }
 
   export type MessageRequest = {
@@ -28,7 +32,11 @@ declare module 'frontEnd' {
     text: string;
     createdAt: Date;
     isRead: boolean;
-    senderId: string;
+    userId: string;
+    user: {
+      id: string;
+      login: string;
+    }
   }
 
   export type Chat = {

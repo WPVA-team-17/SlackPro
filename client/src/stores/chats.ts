@@ -34,10 +34,10 @@ export default defineStore('chatsStore', {
     addChat (chat: Chat) {
       this.chats.push(chat)
     },
-    addMessage (text: string, chatId: string, userId: string, createdAt: Date, id: string) {
+    addMessage (text: string, chatId: string, userId: string, createdAt: Date, id: string, user: { id: string, login: string }) {
       const chatIndex = this.chats.findIndex((item) => item.id === chatId)
       if (chatIndex > -1) {
-        this.chats[chatIndex].messages.push({ text, id, createdAt, isRead: false, senderId: userId })
+        this.chats[chatIndex].messages.push({ text, id, createdAt, isRead: false, userId, user })
       }
     }
 

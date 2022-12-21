@@ -7,10 +7,10 @@
       </template>
     <q-chat-message
       v-for="item in items" :key="item.id"
-      :name="item.senderId"
+      :name="item.user.login"
       :text="[item.text]"
       :stamp="String(item?.createdAt)"
-      :sent="item.senderId === myId"
+      :sent="item.userId === myId"
     />
   </q-infinite-scroll>
 </template>
@@ -25,7 +25,7 @@ export default defineComponent({
   name: 'channel-conversation',
   setup () {
     return {
-      myId: chats.getUserId,
+      myId: computed(() => chats.getUserId),
       items: computed(() => chats.currentChat?.messages || [])
     }
   }

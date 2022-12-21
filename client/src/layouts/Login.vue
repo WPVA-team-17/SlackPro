@@ -57,7 +57,7 @@ export default defineComponent({
         .then(async response => {
           console.warn(JSON.stringify(response.data))
           startSocket(response.data)
-          await chats.setUserId(response.data.userId)
+          chats.setUserId(response.data.user.id)
           chats.setChats(response.data.chats)
           api.defaults.headers.common.Authorization = `Bearer ${response.data.token}`
           console.log(response.data.token)

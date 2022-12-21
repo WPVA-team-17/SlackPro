@@ -7,9 +7,8 @@ const chats = chatsStore()
 function startSocket () {
   socket.connect()
   socket.on('message', (data) => {
-    console.warn('Socket message', data)
-    const { text, chatId, userId, createdAt, id } = data as MessageResponse
-    chats.addMessage(text, chatId, userId, createdAt, id)
+    const { text, chatId, userId, createdAt, id, user } = data as MessageResponse
+    chats.addMessage(text, chatId, userId, createdAt, id, user)
   })
 }
 
