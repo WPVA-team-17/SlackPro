@@ -12,10 +12,10 @@ datasource db {
 
 model User {
   id          String    @id @default(cuid())
-  password    String
+  password    String    @db.VarChar(255)
   login       String    @unique
-  name        String
-  surname     String
+  name        String    @db.VarChar(255)
+  surname     String    @db.VarChar(255)
   participant Chat[]    @relation("participants")
   message     Message[]
   owner       Chat[]    @relation("owner")
@@ -23,7 +23,7 @@ model User {
 
 model Message {
   id        String   @id @default(cuid())
-  text      String
+  text      String   @db.VarChar(1000)
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
@@ -33,11 +33,11 @@ model Message {
 
 model Chat {
   id           String    @id @default(cuid())
-  name         String    @unique
+  name         String    @unique @db.VarChar(255)
   createdAt    DateTime  @default(now())
   messages     Message[] @relation("chat")
   participants User[]    @relation("participants")
-  type         ChatType
+  type         ChatType  @default(PUBLIC)
   lastMsgTime  DateTime?
   owner        User      @relation(fields: [ownerId], references: [id], name: "owner")
   ownerId      String
