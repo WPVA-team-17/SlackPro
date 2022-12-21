@@ -24,6 +24,7 @@
 <script lang="ts">
 import { MessageRequest } from 'frontEnd'
 import { api } from 'src/boot/axios'
+import { socket } from 'src/boot/socket'
 import { defineComponent, ref } from 'vue'
 import chatsStore from '../stores/chats'
 
@@ -57,12 +58,11 @@ export default defineComponent({
       const isPrivate = this.CLIinput.split(' ')[2] === 'private'
       this.$q.notify({
         message: `Joining ${chatName} chat as ${isPrivate ? 'private' : 'public'}`,
-        color: 'green-3',
-        textColor: 'white',
-        icon: 'check_circle',
+        timeout: 3000,
         position: 'top'
       })
-      api.post('chat', {
+
+      api.post('/chat', {
         name: chatName,
         isPrivate
       })
@@ -86,7 +86,18 @@ export default defineComponent({
         })
     },
     onMessage () {
-      this.$socket.emit('message', {
+      if (chats.currentChat === null) {
+        this.$q.notify({
+          message: 'You need to join a chat first',
+          color: 'negative',
+          position: 'top',
+          timeout: 80000
+        })
+        console.warn('You need to join a chat first')
+        return
+      }
+
+      socket.emit('message', {
         text: this.CLIinput,
         chatId: chats.currentChat?.id,
         userId: chats.getUserId
